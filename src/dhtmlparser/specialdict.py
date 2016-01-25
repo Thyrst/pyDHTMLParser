@@ -16,10 +16,10 @@ def _lower_if_str(item):
         item (obj): Str, unicode or any other object.
 
     Returns:
-        obj: ``item.lower()`` if `item` is ``str`` or ``unicode``, else just \
+        obj: ``item.lower()`` if `item` is ``str`` or ``bytes``, else just \
              `item` itself.
     """
-    if type(item) in [str, unicode]:
+    if type(item) in (str, bytes):
         return item.lower()
 
     return item
@@ -37,9 +37,9 @@ class SpecialDict(OrderedDict):
     def __getitem__(self, key):
         key = _lower_if_str(key)
 
-        for item in self.keys():
+        for item in self:
             if key == _lower_if_str(item):
-                return super(SpecialDict, self).__getitem__(item)
+                return super().__getitem__(item)
 
         raise KeyError("Can't find key '%s'!" % key)
 

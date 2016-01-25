@@ -3,15 +3,15 @@
 # Imports =====================================================================
 import gc
 
-import specialdict
-import htmlelement
+from . import specialdict
+from . import htmlelement
 
-from htmlelement import HTMLElement
-from htmlelement import _rotate_buff
+from .htmlelement import HTMLElement
+from .htmlelement import _rotate_buff
 
 
 # Functions ===================================================================
-class StateEnum(object):
+class StateEnum:
     _cnt = (x for x in range(100))
 
     content = next(_cnt)
@@ -296,7 +296,7 @@ def removeTags(dom):
         element_stack = dom
     elif isinstance(dom, HTMLElement):
         element_stack = dom.childs if dom.isTag() else [dom]
-    elif isinstance(dom, basestring):
+    elif isinstance(dom, str):
         element_stack = parseString(dom).childs
     else:
         element_stack = dom

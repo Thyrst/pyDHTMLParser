@@ -10,15 +10,15 @@ HTMLElement class used in DOM representation.
 from ..quoter import escape, unescape
 from ..specialdict import SpecialDict
 
-from shared import NONPAIR_TAGS
-from shared import _rotate_buff
-from shared import _closeElements
+from .shared import NONPAIR_TAGS
+from .shared import _rotate_buff
+from .shared import _closeElements
 
 
 # Functions & objects =========================================================
 # helper functions
 def _is_str(tag):
-    return isinstance(tag, basestring)
+    return isinstance(tag, str)
 
 
 def _is_dict(tag):
