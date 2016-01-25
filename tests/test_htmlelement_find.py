@@ -387,8 +387,8 @@ def test_findNext():
 
     l = [div for div in gen]
 
-    assert len(l) == 6
-    assert len(l[0].childs) == 2
+    assert len(l) == 11
+    assert len(l[0].childs) == 3
     assert l[2].params["id"] == "three"
 
     gen = dom.findNext("nono")
@@ -423,8 +423,8 @@ def test_findNextB():
 
     l = [div for div in gen]
 
-    assert len(l) == 6
-    assert len(l[0].childs) == 2
+    assert len(l) == 11
+    assert len(l[0].childs) == 3
     assert l[2].params["id"] == 4
 
     gen = dom.findNextB("nono")
