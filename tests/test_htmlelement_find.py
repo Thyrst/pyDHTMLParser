@@ -310,6 +310,7 @@ def test_findOne():
         """
     )
 
+    none = dom.findOne("nono")
     some = dom.findOne("some")
     some2 = dom.findOne("some", {"id": "second"})
     something = dom.findOne("something", skip=2)
@@ -317,6 +318,7 @@ def test_findOne():
 
     assert len(some.childs) == 3
     assert len(some2.childs) == 1
+    assert none == None
     assert something.params["id"] == "super"
     assert xe.params["id"] == "wanted xe"
 
@@ -343,6 +345,7 @@ def test_findOneB():
         """
     )
 
+    none = dom.findOneB("nono")
     some = dom.findOneB("some")
     some2 = dom.findOneB("some", {"id": "second"})
     something = dom.findOneB("something", skip=2)
@@ -351,6 +354,7 @@ def test_findOneB():
 
     assert len(some.childs) == 3
     assert len(some2.childs) == 1
+    assert none == None
     assert something.params["id"] == "last"
     assert another.params["id"] == "another xe"
     assert xe.params["id"] == "wanted xe"
@@ -387,6 +391,10 @@ def test_findNext():
     assert len(l[0].childs) == 2
     assert l[2].params["id"] == "three"
 
+    gen = dom.findNext("nono")
+    for x in gen:
+        assert False # we don't expect any found elements
+
 def test_findNextB():
     dom = dhtmlparser.parseString(
         """
@@ -418,3 +426,7 @@ def test_findNextB():
     assert len(l) == 6
     assert len(l[0].childs) == 2
     assert l[2].params["id"] == 4
+
+    gen = dom.findNextB("nono")
+    for x in gen:
+        assert False # we don't expect any found elements
