@@ -112,7 +112,7 @@ class HTMLQuery(HTMLParser):
 
         return list(output)
 
-    def findAll(self, tag_name, params=None, fn=None, case_sensitive=False):
+    def findNext(self, tag_name, params=None, fn=None, case_sensitive=False):
         """
         Search for elements by their parameters using `Depth-first algorithm
         <http://en.wikipedia.org/wiki/Depth-first_search>`_.
@@ -127,24 +127,19 @@ class HTMLQuery(HTMLParser):
             case_sensitive (bool, default False): Use case sensitive search.
 
         Returns:
-            list: List of :class:`HTMLElement` instances matching your \
-                  criteria.
+            generator: Generator of :class:`HTMLElement` instances matching your \
+                criteria.
         """
         output = []
 
         if self.isAlmostEqual(tag_name, params, fn, case_sensitive):
-            output.append(self)
+            yield self
 
-        tmp = []
         for el in self.childs:
-            tmp = el.findAll(tag_name, params, fn, case_sensitive)
+            for x in el.findNext(tag_name, params, fn, case_sensitive):
+                yield x
 
-            if tmp:
-                output.extend(tmp)
-
-        return output
-
-    def findAllB(self, tag_name, params=None, fn=None, case_sensitive=False):
+    def findNextB(self, tag_name, params=None, fn=None, case_sensitive=False):
         """
         Simple search engine using `Breadth-first algorithm
         <http://en.wikipedia.org/wiki/Breadth-first_search>`_.
@@ -162,20 +157,98 @@ class HTMLQuery(HTMLParser):
             list: List of :class:`HTMLElement` instances matching your \
                   criteria.
         """
-        output = []
-
         if self.isAlmostEqual(tag_name, params, fn, case_sensitive):
-            output.append(self)
+            yield self
 
         breadth_search = self.childs
         for el in breadth_search:
             if el.isAlmostEqual(tag_name, params, fn, case_sensitive):
-                output.append(el)
+                yield el
 
             if el.childs:
                 breadth_search.extend(el.childs)
 
-        return output
+    def findAll(self, tag_name, params=None, fn=None, case_sensitive=False):
+        """
+        Args:
+            tag_name (str): Name of the tag you are looking for. Set to "" if
+                            you wish to use only `fn` parameter.
+            params (dict, default None): Parameters which have to be present
+                   in tag to be considered matching.
+            fn (function, default None): Use this function to match tags.
+               Function expects one parameter which is HTMLElement instance.
+            case_sensitive (bool, default False): Use case sensitive search.
+
+        Returns:
+            list: List of :class:`HTMLElement` instances matching your \
+                  criteria.
+        """
+        return list(self.findNext(tag_name, params, fn, case_sensitive))
+
+    def findAllB(self, tag_name, params=None, fn=None, case_sensitive=False):
+        """
+        Args:
+            tag_name (str): Name of the tag you are looking for. Set to "" if
+                            you wish to use only `fn` parameter.
+            params (dict, default None): Parameters which have to be present
+                   in tag to be considered matching.
+            fn (function, default None): Use this function to match tags.
+               Function expects one parameter which is HTMLElement instance.
+            case_sensitive (bool, default False): Use case sensitive search.
+
+        Returns:
+            list: List of :class:`HTMLElement` instances matching your \
+                  criteria.
+        """
+        return list(self.findNextB(tag_name, params, fn, case_sensitive))
+
+    def findOne(self, tag_name, params=None, fn=None, case_sensitive=False, skip=0):
+        """
+        Args:
+            skip (int, default 0): number of elements to ignore before finding
+                the One
+            tag_name (str): Name of the tag you are looking for. Set to "" if
+                            you wish to use only `fn` parameter.
+            params (dict, default None): Parameters which have to be present
+                   in tag to be considered matching.
+            fn (function, default None): Use this function to match tags.
+               Function expects one parameter which is HTMLElement instance.
+            case_sensitive (bool, default False): Use case sensitive search.
+
+        Returns:
+            :class:`HTMLElement` instance matching your criteria
+            None: if not found
+        """
+        try:
+            ret = self.find(tag_name, params, fn, case_sensitive)[skip]
+        except IndexError:
+            ret = None
+
+        return ret
+
+    def findOneB(self, tag_name, params=None, fn=None, case_sensitive=False, skip=0):
+        """
+        Args:
+            skip (int, default 0): number of elements to ignore before finding
+                the One
+            tag_name (str): Name of the tag you are looking for. Set to "" if
+                            you wish to use only `fn` parameter.
+            params (dict, default None): Parameters which have to be present
+                   in tag to be considered matching.
+            fn (function, default None): Use this function to match tags.
+               Function expects one parameter which is HTMLElement instance.
+            case_sensitive (bool, default False): Use case sensitive search.
+
+        Returns:
+            :class:`HTMLElement` instance matching your criteria
+            None: if not found
+        """
+        try:
+            ret = self.findB(tag_name, params, fn, case_sensitive)[skip]
+        except IndexError:
+            ret = None
+
+        return ret
 
     def wfind(self, tag_name, params=None, fn=None, case_sensitive=False):
         """
