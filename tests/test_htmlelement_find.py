@@ -7,6 +7,8 @@
 import dhtmlparser
 from dhtmlparser import first
 
+from types import GeneratorType
+
 
 # Functions & objects =========================================================
 def test_find():
@@ -284,3 +286,135 @@ def test_match_parameters_relative_path():
     )
 
     assert not xe
+
+def test_findOne():
+    dom = dhtmlparser.parseString(
+        """
+        <root>
+            <some id="first">
+                <something id="first">
+                    <xe id="wanted xe" />
+                </something>
+                <something id="second">
+                    <xe id="another wanted xe" />
+                    <something id="super" />
+                </something>
+                <xe id="another xe" />
+            </some>
+            <some id="second">
+                <something id="last">
+                    <xe id="last xe" />
+                </something>
+            </some>
+        </root>
+        """
+    )
+
+    some = dom.findOne("some")
+    some2 = dom.findOne("some", {"id": "second"})
+    something = dom.findOne("something", skip=2)
+    xe = dom.findOne("xe")
+
+    assert len(some.childs) == 3
+    assert len(some2.childs) == 1
+    assert something.params["id"] == "super"
+    assert xe.params["id"] == "wanted xe"
+
+def test_findOneB():
+    dom = dhtmlparser.parseString(
+        """
+        <root>
+            <some id="first">
+                <something id="first">
+                    <xe id="wanted xe" />
+                </something>
+                <something id="second">
+                    <xe id="another wanted xe" />
+                    <something id="super" />
+                </something>
+                <xe id="another xe" />
+            </some>
+            <some id="second">
+                <something id="last">
+                    <xe id="last xe" />
+                </something>
+            </some>
+        </root>
+        """
+    )
+
+    some = dom.findOneB("some")
+    some2 = dom.findOneB("some", {"id": "second"})
+    something = dom.findOneB("something", skip=2)
+    another = dom.findOneB("xe")
+    xe = dom.findOneB("xe", skip=1)
+
+    assert len(some.childs) == 3
+    assert len(some2.childs) == 1
+    assert something.params["id"] == "last"
+    assert another.params["id"] == "another xe"
+    assert xe.params["id"] == "wanted xe"
+
+def test_findNext():
+    dom = dhtmlparser.parseString(
+        """
+        <root>
+            <div>
+                <something />
+                <div id=2>
+                    <xe />
+                </div>
+            </div>
+            <div id="three">
+            </div>
+            <div>
+                <some>
+                    <div>foo</div>
+                </some>
+                <div />
+            </div>
+        </root>
+        """
+    )
+
+    gen = dom.findNext("div")
+
+    assert isinstance(gen, GeneratorType)
+
+    l = [div for div in gen]
+
+    assert len(l) == 6
+    assert len(l[0].childs) == 2
+    assert l[2].params["id"] == "three"
+
+def test_findNextB():
+    dom = dhtmlparser.parseString(
+        """
+        <root>
+            <div>
+                <something />
+                <div id=2>
+                    <xe />
+                </div>
+            </div>
+            <div id="three">
+            </div>
+            <div id=4>
+                <some>
+                    <div>foo</div>
+                </some>
+                <div />
+            </div>
+        </root>
+        """
+    )
+
+    gen = dom.findNextB("div")
+
+    assert isinstance(gen, GeneratorType)
+
+    l = [div for div in gen]
+
+    assert len(l) == 6
+    assert len(l[0].childs) == 2
+    assert l[2].params["id"] == 4
