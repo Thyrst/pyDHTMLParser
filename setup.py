@@ -7,7 +7,10 @@
 from setuptools import setup
 from setuptools import find_packages
 
-from docs import getVersion
+#from docs import getVersion
+# docs aren't ported to python 3 yet
+def getVersion(a):
+    return "3.0.0"
 
 
 # Variables ===================================================================
