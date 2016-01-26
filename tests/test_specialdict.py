@@ -47,19 +47,11 @@ def test_getting_item():
 
 
 def test_keys():
-    assert sd.keys() == ["A", "b", "X"]
-
-
-def test_iterkeys():
-    assert list(sd.iterkeys()) == ["A", "b", "X"]
+    assert list(sd.keys()) == ["A", "b", "X"]
 
 
 def test_items():
-    assert sd.items() == [("A", "B"), ("b", "c"), ("X", "Y")]
-
-
-def test_iteritems():
-    assert list(sd.iteritems()) == [("A", "B"), ("b", "c"), ("X", "Y")]
+    assert list(sd.items()) == [("A", "B"), ("b", "c"), ("X", "Y")]
 
 
 def test_iteration():

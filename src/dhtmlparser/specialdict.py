@@ -19,11 +19,7 @@ def _lower_if_str(item):
         obj: ``item.lower()`` if `item` is ``str`` or ``bytes``, else just \
              `item` itself.
     """
-<<<<<<< HEAD
     if type(item) in (str, bytes):
-=======
-    if isinstance(item, basestring):
->>>>>>> 864c52fac54e60ad7efb10654e73a89d38a2424e
         return item.lower()
 
     return item
@@ -38,7 +34,7 @@ class SpecialDict(OrderedDict):
         # lower_key -> key mapping
         self._case = OrderedDict()
 
-        super(SpecialDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __setitem__(self, key, value):
         lower_key = _lower_if_str(key)
@@ -50,7 +46,7 @@ class SpecialDict(OrderedDict):
 
         self._case[lower_key] = key
 
-        super(SpecialDict, self).__setitem__(key, value)
+        super().__setitem__(key, value)
 
     def __getitem__(self, key):
         lower_key = _lower_if_str(key)
@@ -58,38 +54,32 @@ class SpecialDict(OrderedDict):
         if lower_key not in self._case:
             raise KeyError(repr(key))
 
-        return super(SpecialDict, self).__getitem__(self._case[lower_key])
+        return super().__getitem__(self._case[lower_key])
 
     def __delitem__(self, key):
         lower_key = _lower_if_str(key)
         key = self._case[lower_key]
 
-<<<<<<< HEAD
-        for item in self:
-            if key == _lower_if_str(item):
-                return super().__getitem__(item)
-=======
         del self._case[lower_key]
->>>>>>> 864c52fac54e60ad7efb10654e73a89d38a2424e
 
-        return super(SpecialDict, self).__delitem__(key)
+        return super().__delitem__(key)
 
     def clear(self):
         self._case.clear()
-        return super(SpecialDict, self).clear()
+        return super().clear()
 
     def get(self, k, d=None):
         lower_key = _lower_if_str(k)
         if lower_key not in self._case:
             return d
 
-        return super(SpecialDict, self).get(self._case[lower_key], d)
+        return super().get(self._case[lower_key], d)
 
     def __contains__(self, key):
         lower_key = _lower_if_str(key)
         right_key = self._case.get(lower_key, None)
 
-        return right_key and right_key in set(self.viewkeys())
+        return right_key and right_key in self
 
     def has_key(self, key):
         return key in self
