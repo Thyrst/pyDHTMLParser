@@ -30,11 +30,14 @@ class SpecialDict(OrderedDict):
     This dictionary stores items case sensitive, but compare them case
     INsensitive.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, dic=None):
         # lower_key -> key mapping
         self._case = OrderedDict()
+        super().__init__()
 
-        super().__init__(*args, **kwargs)
+        if dic:
+            for key, value in OrderedDict(dic).items():
+                self[key] = value
 
     def __setitem__(self, key, value):
         lower_key = _lower_if_str(key)
@@ -79,7 +82,7 @@ class SpecialDict(OrderedDict):
         lower_key = _lower_if_str(key)
         right_key = self._case.get(lower_key, None)
 
-        return right_key and right_key in self
+        return right_key and super().__contains__(right_key)
 
     def has_key(self, key):
         return key in self
