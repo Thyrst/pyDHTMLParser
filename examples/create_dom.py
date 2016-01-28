@@ -15,13 +15,13 @@ e = HTMLElement("root", [
 		HTMLElement("<item />", {"blank" : "body"})
 	])
 
-print e.prettify()
+print(e.prettify())
 
 """
 Writes:
 
 <root>
-  <item param2="2" param1="1">
+  <item param1="1" param2="2">
     <crap>hello parser!</crap>
     <another_crap with="params" />
     <!-- comment -->

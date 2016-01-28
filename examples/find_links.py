@@ -5,15 +5,15 @@
 DHTMLParserPy example how to find every link in document.
 """
 
-import urllib
+import urllib.request
 import dhtmlparser
 
-f = urllib.urlopen("http://google.com")
-data = f.read()
+f = urllib.request.urlopen("http://google.com")
+data = f.read().decode("utf-8", "replace")
 f.close()
 
 dom = dhtmlparser.parseString(data)
 
 for link in dom.find("a"):
 	if "href" in link.params:
-		print link.params["href"]
+		print(link.params["href"])

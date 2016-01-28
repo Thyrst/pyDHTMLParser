@@ -246,6 +246,9 @@ def parseString(txt, cip=True):
     if isinstance(txt, HTMLElement):
         return txt
 
+    if isinstance(txt, bytes):
+        txt = txt.decode("utf-8")
+        
     # remove UTF BOM (prettify fails if not)
     if len(txt) > 3 and txt.startswith("\xef\xbb\xbf"):
         txt = txt[3:]

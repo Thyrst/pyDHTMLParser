@@ -4,20 +4,19 @@
 from dhtmlparser import *
 
 # if inside container (or other tag), create endtag automatically
-print HTMLElement([
+print(HTMLElement([
 	HTMLElement("<xe>")
-])
+]))
 """
 Writes:
 
-<xe>
-</xe>
+<xe></xe>
 """
 
 #-------------------------------------------------------------------------------
 
 # if not inside container, elements are left unclosed 
-print HTMLElement("<xe>")
+print(HTMLElement("<xe>"))
 """
 Writes only:
 

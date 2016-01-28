@@ -10,11 +10,11 @@ import dhtmlparser
 
 def test_get_links():
     f = urllib.request.urlopen("http://google.com")
-    data = f.read()
+    data = f.read().decode("utf-8", "replace")
     f.close()
 
     dom = dhtmlparser.parseString(data)
 
     for link in dom.find("a"):
     	if "href" in link.params:
-    		assert isinstance(link.params["href"], list)
+    		assert isinstance(link.params["href"], str)

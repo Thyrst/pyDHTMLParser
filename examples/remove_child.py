@@ -12,15 +12,15 @@ s = """
 
 dom = d.parseString(s)
 
-print dom
-print "---\nRemove all <object1>:\n---\n"
+print(dom)
+print("---\nRemove all <object1>:\n---\n")
 
 # remove all <object1>
 for e in dom.find("object1"):
 	dom.removeChild(e)
 
 
-print dom.prettify()
+print(dom.prettify())
 
 
 #* Prints: *********************************************************************
